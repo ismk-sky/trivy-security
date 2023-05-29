@@ -1,7 +1,8 @@
 import uuid
 from azure.storage.blob import BlobServiceClient
 
-connection_string = "DefaultEndpointsProtocol=https;AccountName=ismktest;AccountKey=hogehogehogehogehogehoge/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;EndpointSuffix=core.windows.net"
+AZURE_BLOB_KEY = "J4SiB0qPWqKwlft7WJ5YhoTVWGlxd5RtL9/c4WheCG7YVx4UNufnYXOt5QI5XqM4cvqI6k3AjuQA+AStl45qfA=="  #偽物だけど
+connection_string = "DefaultEndpointsProtocol=https;AccountName=ismktest;AccountKey=" + AZURE_BLOB_KEY + ";EndpointSuffix=core.windows.net"
 container_name = "test"
 local_file_path = "ismk.jpg"
 blob_name = str(uuid.uuid1())+".png" 
